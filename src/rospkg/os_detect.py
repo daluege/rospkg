@@ -36,6 +36,7 @@ Linux distributions.
 from __future__ import print_function
 
 import os
+import re
 import subprocess
 import platform
 import locale
@@ -127,7 +128,11 @@ class LsbDetect(OsDetector):
             self.lsb_info = None
 
     def is_os(self):
-        return self.lsb_info is not None and self.lsb_info[0] == self.lsb_name
+        lsb_name = self.lsb_info and self.lsb_info[0]
+        if not lsb_name:
+          return False
+        lsb_name = re.sub(r'^"|"$', '', lsb_name)
+        return self.lsb_name == self.lsb_name
 
     def get_version(self):
         if self.is_os():
